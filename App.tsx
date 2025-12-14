@@ -4,7 +4,7 @@ import { getStoredStudents, saveStoredStudents, getStoredAttendance, saveStoredA
 import { StudentForm } from './components/StudentForm';
 import { AIGenerator } from './components/AIGenerator';
 import { AttendanceView } from './components/AttendanceView';
-import { Plus, Search, Phone, Edit2, Trash2, Bot, School, GraduationCap, MapPin, User, Users, Calendar, BookOpen, Building2 } from 'lucide-react';
+import { Plus, Phone, Edit2, Trash2, Bot, School, GraduationCap, MapPin, User, Users, Calendar, BookOpen, Building2 } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'students' | 'attendance'>('students');
@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const [attendance, setAttendance] = useState<AttendanceData>({});
   
   // Student List State
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedSchool, setSelectedSchool] = useState<string | null>(null);
   
   // Modals
@@ -119,16 +118,9 @@ const App: React.FC = () => {
   // Get unique schools based on Turkish School (primary grouping)
   const uniqueSchools = Array.from(new Set(students.map(s => s.turkishSchool).filter(Boolean))).sort();
 
-  const filteredStudents = students.filter(s => {
-    const searchLower = searchTerm.toLowerCase();
-    const matchesSearch = 
-      s.fullName.toLowerCase().includes(searchLower) ||
-      (s.turkishSchool && s.turkishSchool.toLowerCase().includes(searchLower)) ||
-      (s.registeredSchool && s.registeredSchool.toLowerCase().includes(searchLower));
-
-    const matchesSchool = selectedSchool ? s.turkishSchool === selectedSchool : true;
-    return matchesSearch && matchesSchool;
-  });
+  const filteredStudents = selectedSchool 
+    ? students.filter(s => s.turkishSchool === selectedSchool)
+    : students;
 
   return (
     <div className="h-[100dvh] max-w-lg mx-auto bg-[#f8fafc] shadow-2xl overflow-hidden relative flex flex-col">
@@ -151,17 +143,6 @@ const App: React.FC = () => {
                 </div>
               </div>
               
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-300" size={20} />
-                <input
-                  type="text"
-                  placeholder="Rechercher un nom ou une école..."
-                  className="w-full bg-indigo-800/50 placeholder-indigo-300 text-white pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm transition-all"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-
               {uniqueSchools.length > 0 && (
                 <div className="flex gap-2 overflow-x-auto pb-2 -mx-2 px-2 no-scrollbar">
                   <button
