@@ -41,7 +41,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
       });
       setGeneratedMessage(msg);
     } catch (error) {
-      setGeneratedMessage("Hata: Mesaj oluşturulamadı. Lütfen tekrar deneyin.");
+      setGeneratedMessage("Erreur : Impossible de créer le message. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
         <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-indigo-600 to-purple-600 rounded-t-2xl">
           <div className="flex items-center gap-2 text-white">
             <Sparkles size={20} className="animate-pulse" />
-            <h3 className="font-bold text-lg">AI Mesaj Asistanı</h3>
+            <h3 className="font-bold text-lg">Assistant Message IA</h3>
           </div>
           <button onClick={onClose} className="text-white/80 hover:text-white">
             <X size={24} />
@@ -77,7 +77,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
           
           {/* Parent Selection */}
           <div className="mb-4">
-            <label className="block text-xs font-semibold text-gray-500 uppercase mb-2">Mesaj Gönderilecek Kişi</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase mb-2">Destinataire</label>
             <div className="flex gap-2">
               {hasMother && (
                 <button
@@ -90,7 +90,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
                 >
                   <User size={16} />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs font-bold">Anne</span>
+                    <span className="text-xs font-bold">Mère</span>
                     <span className="text-xs truncate max-w-[80px]">{student.motherName}</span>
                   </div>
                 </button>
@@ -106,25 +106,25 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
                 >
                   <User size={16} />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs font-bold">Baba</span>
+                    <span className="text-xs font-bold">Père</span>
                     <span className="text-xs truncate max-w-[80px]">{student.fatherName}</span>
                   </div>
                 </button>
               )}
               {!hasMother && !hasFather && (
                 <div className="text-red-500 text-sm p-2 bg-red-50 rounded w-full">
-                  Kayıtlı veli bilgisi bulunamadı.
+                  Aucune information parentale trouvée.
                 </div>
               )}
             </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Mesaj Konusu</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Sujet du message</label>
             <input
               type="text"
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              placeholder="Örn: Ödevlerini yapmadı, Derse geç kaldı..."
+              placeholder="Ex: Devoirs non faits, En retard en classe..."
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
             />
@@ -142,12 +142,12 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Düşünülüyor...
+                  Réflexion en cours...
                 </>
               ) : (
                 <>
                   <Sparkles size={18} />
-                  Mesaj Oluştur
+                  Générer le message
                 </>
               )}
             </button>
@@ -155,7 +155,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
 
           {generatedMessage && (
             <div className="mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Oluşturulan Taslak</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Brouillon généré</label>
               <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-800 text-sm whitespace-pre-wrap leading-relaxed relative">
                 {generatedMessage}
               </div>
@@ -166,7 +166,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
                   className="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
                 >
                   {copied ? <Check size={18} className="text-green-600" /> : <Copy size={18} />}
-                  {copied ? 'Kopyalandı' : 'Kopyala'}
+                  {copied ? 'Copié' : 'Copier'}
                 </button>
                 {getTargetPhone() && (
                   <a
@@ -185,7 +185,7 @@ export const AIGenerator: React.FC<AIGeneratorProps> = ({ student, onClose }) =>
                   onClick={() => { setGeneratedMessage(''); setTopic(''); }}
                   className="w-full mt-3 text-sm text-gray-500 hover:text-gray-800 underline"
                 >
-                  Yeni Mesaj Oluştur
+                  Générer un nouveau message
                 </button>
             </div>
           )}

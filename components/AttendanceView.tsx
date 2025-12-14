@@ -19,7 +19,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
   // Calendar Logic
   const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
   const getFirstDayOfMonth = (year: number, month: number) => {
-    // 0 = Sunday, but we want Monday as start (European/Turkish style usually)
+    // 0 = Sunday, but we want Monday as start
     const day = new Date(year, month, 1).getDay();
     return day === 0 ? 6 : day - 1; 
   };
@@ -28,14 +28,15 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
   const month = currentDate.getMonth();
   const daysInMonth = getDaysInMonth(year, month);
   const firstDay = getFirstDayOfMonth(year, month);
-  const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  
+  // French Month Names
+  const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
   const changeMonth = (delta: number) => {
     setCurrentDate(new Date(year, month + delta, 1));
   };
 
   const handleDateClick = (day: number) => {
-    const newDate = new Date(year, month, day + 1); // +1 because timezone issues can shift it, simpler to just construct string
     // Safer string construction for local time
     const yyyy = year;
     const mm = String(month + 1).padStart(2, '0');
@@ -43,8 +44,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
     setSelectedDateStr(`${yyyy}-${mm}-${dd}`);
   };
 
-  // Filter Logic - Using Turkish School
-  // Fallback to deprecated schoolName if turkishSchool is empty for backward compatibility in view
+  // Filter Logic
   const uniqueSchools = Array.from(new Set(students.map(s => s.turkishSchool || s.schoolName).filter(Boolean))).sort();
   
   const filteredStudents = selectedSchool 
@@ -109,7 +109,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
 
         {/* Days Grid */}
         <div className="grid grid-cols-7 gap-1 text-center mb-2">
-          {['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pz'].map(d => (
+          {['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'].map(d => (
             <div key={d} className="text-xs font-bold text-gray-400 uppercase">{d}</div>
           ))}
         </div>
@@ -155,7 +155,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
                 : 'bg-white text-gray-600 border border-gray-200'
             }`}
           >
-            Tümü
+            Tous
           </button>
           {uniqueSchools.map(school => (
             <button
@@ -184,7 +184,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
            onClick={markAllPresent}
            className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-bold hover:bg-indigo-100 transition-colors border border-indigo-100"
          >
-           Tümünü Var Say
+           Tous présents
          </button>
       </div>
 
@@ -192,7 +192,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
       <div className="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
         {filteredStudents.length === 0 ? (
             <div className="text-center text-gray-400 py-10 text-sm">
-                {students.length === 0 ? "Öğrenci listeniz boş." : "Bu okulda öğrenci bulunamadı."}
+                {students.length === 0 ? "Votre liste d'élèves est vide." : "Aucun élève trouvé dans cette école."}
             </div>
         ) : (
             filteredStudents.map(student => {

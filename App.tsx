@@ -21,11 +21,11 @@ const App: React.FC = () => {
 
   // Load data on mount
   useEffect(() => {
-    // Migration logic on load: if old data exists, ensure fields are populated for UI
+    // Migration logic on load
     const loadedStudents = getStoredStudents().map(s => {
       let modified = { ...s };
       
-      // Ensure ID exists (crucial for deletion)
+      // Ensure ID exists
       if (!modified.id) {
         modified.id = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
       }
@@ -44,7 +44,6 @@ const App: React.FC = () => {
     saveStoredStudents(students);
   }, [students]);
 
-  // Save attendance data is handled by callback but we can sync here too if needed
   const handleSaveAttendance = (data: AttendanceData) => {
     setAttendance(data);
     saveStoredAttendance(data);
@@ -65,7 +64,7 @@ const App: React.FC = () => {
   const handleDeleteStudent = (id: string) => {
     if (!id) return;
     
-    if (window.confirm('Bu öğrenciyi ve tüm kayıtlarını silmek istediğinize emin misiniz?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet élève et toutes ses données ?')) {
       // 1. Delete Student
       setStudents(prev => prev.filter(s => s.id !== id));
       
@@ -142,9 +141,9 @@ const App: React.FC = () => {
             <header className="bg-indigo-600 text-white p-6 rounded-b-[2rem] shadow-lg relative z-10 flex-shrink-0 transition-all duration-300">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold">Merhaba, Öğretmenim</h1>
+                  <h1 className="text-2xl font-bold">Bonjour, Professeur</h1>
                   <p className="text-indigo-200 text-sm">
-                    Öğrenci Listesi ({filteredStudents.length}/{students.length})
+                    Liste des élèves ({filteredStudents.length}/{students.length})
                   </p>
                 </div>
                 <div className="bg-white/20 p-2 rounded-lg">
@@ -156,7 +155,7 @@ const App: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-300" size={20} />
                 <input
                   type="text"
-                  placeholder="İsim veya okul ara..."
+                  placeholder="Rechercher un nom ou une école..."
                   className="w-full bg-indigo-800/50 placeholder-indigo-300 text-white pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm transition-all"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -173,7 +172,7 @@ const App: React.FC = () => {
                         : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/50 border border-indigo-500/30'
                     }`}
                   >
-                    Tümü
+                    Tous
                   </button>
                   {uniqueSchools.map(school => (
                     <button
@@ -199,8 +198,8 @@ const App: React.FC = () => {
                   <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <School size={32} />
                   </div>
-                  <p>{students.length === 0 ? "Kayıtlı öğrenci bulunamadı." : "Aranan kriterlere uygun öğrenci bulunamadı."}</p>
-                  {students.length === 0 && <p className="text-sm">Yeni bir öğrenci eklemek için + butonuna basın.</p>}
+                  <p>{students.length === 0 ? "Aucun élève inscrit." : "Aucun élève trouvé pour ces critères."}</p>
+                  {students.length === 0 && <p className="text-sm">Appuyez sur + pour ajouter un élève.</p>}
                 </div>
               ) : (
                 filteredStudents.map(student => (
@@ -213,7 +212,7 @@ const App: React.FC = () => {
                            {/* Turkish School (Primary Grouping) */}
                            <div className="flex items-center gap-2 text-sm text-indigo-600 font-medium">
                               <BookOpen size={14} className="flex-shrink-0" />
-                              <span>{student.turkishSchool || 'Türkçe okulu girilmemiş'}</span>
+                              <span>{student.turkishSchool || 'École non renseignée'}</span>
                               {student.grade && <span className="bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded text-[10px] border border-indigo-100">{student.grade}</span>}
                            </div>
                            
@@ -221,14 +220,14 @@ const App: React.FC = () => {
                            {student.registeredSchool && (
                              <div className="flex items-center gap-2 text-xs text-gray-500">
                                 <Building2 size={12} className="flex-shrink-0" />
-                                <span>Kayıtlı: {student.registeredSchool}</span>
+                                <span>Officielle : {student.registeredSchool}</span>
                              </div>
                            )}
                         </div>
                       </div>
                       
                       <div className="flex gap-1 flex-shrink-0 ml-2">
-                        <button onClick={() => openAIModal(student)} className="p-2 text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-full transition-colors" title="AI Mesaj Oluştur">
+                        <button onClick={() => openAIModal(student)} className="p-2 text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-full transition-colors" title="Message IA">
                           <Bot size={18} />
                         </button>
                         <button onClick={() => openEditModal(student)} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors">
@@ -241,7 +240,7 @@ const App: React.FC = () => {
                             handleDeleteStudent(student.id); 
                           }} 
                           className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors z-10"
-                          title="Öğrenciyi Sil"
+                          title="Supprimer l'élève"
                         >
                           <Trash2 size={20} />
                         </button>
@@ -253,7 +252,7 @@ const App: React.FC = () => {
                          <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                              <User size={16} className="text-gray-400" />
-                             <span className="text-gray-600 text-sm">Veli: <span className="font-semibold text-gray-800">{student.parentName}</span></span>
+                             <span className="text-gray-600 text-sm">Parent : <span className="font-semibold text-gray-800">{student.parentName}</span></span>
                           </div>
                           {student.parentPhone && (
                             <a href={`tel:${student.parentPhone}`} className="p-2 bg-green-100 text-green-700 rounded-full hover:bg-green-200">
@@ -265,7 +264,7 @@ const App: React.FC = () => {
                       {student.motherName && (
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2 last:border-0 last:pb-0">
                           <div className="flex items-center gap-2">
-                            <span className="w-10 text-xs font-bold text-pink-600 uppercase">Anne</span>
+                            <span className="w-10 text-xs font-bold text-pink-600 uppercase">Mère</span>
                             <span className="text-gray-800 font-medium text-sm">{student.motherName}</span>
                           </div>
                           {student.motherPhone && (
@@ -278,7 +277,7 @@ const App: React.FC = () => {
                       {student.fatherName && (
                         <div className="flex items-center justify-between border-b border-gray-100 pb-2 last:border-0 last:pb-0">
                           <div className="flex items-center gap-2">
-                            <span className="w-10 text-xs font-bold text-blue-600 uppercase">Baba</span>
+                            <span className="w-10 text-xs font-bold text-blue-600 uppercase">Père</span>
                             <span className="text-gray-800 font-medium text-sm">{student.fatherName}</span>
                           </div>
                           {student.fatherPhone && (
@@ -325,7 +324,7 @@ const App: React.FC = () => {
           }`}
         >
           <Users size={24} className={activeTab === 'students' ? 'fill-indigo-600' : ''} />
-          <span className="text-xs font-semibold">Öğrenciler</span>
+          <span className="text-xs font-semibold">Élèves</span>
         </button>
         <button
           onClick={() => setActiveTab('attendance')}
@@ -334,7 +333,7 @@ const App: React.FC = () => {
           }`}
         >
           <Calendar size={24} className={activeTab === 'attendance' ? 'fill-indigo-600' : ''} />
-          <span className="text-xs font-semibold">Yoklama</span>
+          <span className="text-xs font-semibold">Présence</span>
         </button>
       </div>
 

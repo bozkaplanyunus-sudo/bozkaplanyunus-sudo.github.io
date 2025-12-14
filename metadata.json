@@ -1,5 +1,5 @@
 {
-  "name": "Öğrenci Takip Asistanı",
-  "description": "Öğretmenler için mobil uyumlu, yapay zeka destekli öğrenci ve veli bilgi yönetim sistemi.",
+  "name": "Suivi des Élèves",
+  "description": "Système de gestion des informations élèves et parents assisté par IA pour les enseignants.",
   "requestFramePermissions": []
 }

@@ -35,8 +35,6 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
       }
 
       // Migration Logic: School Name
-      // If old "schoolName" exists but new fields don't, map it to Turkish School
-      // (assuming the app is primarily for the Turkish course context)
       if (data.schoolName && !data.turkishSchool) {
         data.turkishSchool = data.schoolName;
       }
@@ -62,7 +60,7 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white sticky top-0 z-10">
         <h2 className="text-xl font-bold text-gray-800">
-          {initialData ? 'Öğrenci Düzenle' : 'Yeni Öğrenci Ekle'}
+          {initialData ? "Modifier l'élève" : "Ajouter un élève"}
         </h2>
         <button onClick={onCancel} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
           <X size={24} className="text-gray-600" />
@@ -71,37 +69,37 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
 
       {/* Form Body */}
       <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 pb-24">
-        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4 mt-2">Öğrenci Bilgileri</h3>
+        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4 mt-2">Informations de l'élève</h3>
         <Input
-          label="Ad Soyad"
+          label="Nom Prénom"
           name="fullName"
           value={formData.fullName}
           onChange={handleChange}
-          placeholder="Örn: Ali Yılmaz"
+          placeholder="Ex: Ali Yılmaz"
           required
         />
 
         <div className="my-4 space-y-4">
            <Input
-            label="Türkçe Dersine Geldiği Okul"
+            label="École de langue (Turc)"
             name="turkishSchool"
             value={formData.turkishSchool || ''}
             onChange={handleChange}
-            placeholder="Örn: Merkez İlkokulu"
+            placeholder="Ex: École Centre"
             required
           />
           <Input
-            label="Kayıtlı Olduğu (Esas) Okul"
+            label="École principale (Officielle)"
             name="registeredSchool"
             value={formData.registeredSchool || ''}
             onChange={handleChange}
-            placeholder="Örn: Atatürk Anadolu Lisesi"
+            placeholder="Ex: Lycée Anatolie Atatürk"
           />
         </div>
 
         <div className="grid grid-cols-1 gap-4">
           <Input
-            label="Sınıf / Şube"
+            label="Classe"
             name="grade"
             value={formData.grade}
             onChange={handleChange}
@@ -112,17 +110,17 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
         <div className="my-6 border-t border-gray-100"></div>
         
         {/* Anne Bilgileri */}
-        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">Anne Bilgileri</h3>
+        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">Informations Mère</h3>
         <div className="grid grid-cols-1 gap-4">
           <Input
-            label="Anne Adı Soyadı"
+            label="Nom Prénom (Mère)"
             name="motherName"
             value={formData.motherName || ''}
             onChange={handleChange}
-            placeholder="Örn: Ayşe Yılmaz"
+            placeholder="Ex: Ayşe Yılmaz"
           />
           <Input
-            label="Anne Telefon"
+            label="Téléphone (Mère)"
             name="motherPhone"
             type="tel"
             value={formData.motherPhone || ''}
@@ -134,17 +132,17 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
         <div className="my-6 border-t border-gray-100"></div>
 
         {/* Baba Bilgileri */}
-        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">Baba Bilgileri</h3>
+        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">Informations Père</h3>
         <div className="grid grid-cols-1 gap-4">
           <Input
-            label="Baba Adı Soyadı"
+            label="Nom Prénom (Père)"
             name="fatherName"
             value={formData.fatherName || ''}
             onChange={handleChange}
-            placeholder="Örn: Mehmet Yılmaz"
+            placeholder="Ex: Mehmet Yılmaz"
           />
           <Input
-            label="Baba Telefon"
+            label="Téléphone (Père)"
             name="fatherPhone"
             type="tel"
             value={formData.fatherPhone || ''}
@@ -156,20 +154,20 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
         <div className="my-6 border-t border-gray-100"></div>
 
         {/* İletişim ve Notlar */}
-        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">İletişim & Diğer</h3>
+        <h3 className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-4">Contact & Autres</h3>
         <TextArea
-          label="Ev Adresi"
+          label="Adresse"
           name="address"
           value={formData.address || ''}
           onChange={handleChange}
-          placeholder="Mahalle, Cadde, Sokak, No..."
+          placeholder="Quartier, Rue, N°..."
         />
         <TextArea
-          label="Notlar"
+          label="Notes"
           name="notes"
           value={formData.notes || ''}
           onChange={handleChange}
-          placeholder="Öğrenci hakkında özel notlar..."
+          placeholder="Notes spéciales sur l'élève..."
         />
       </form>
 
@@ -180,7 +178,7 @@ export const StudentForm: React.FC<StudentFormProps> = ({ initialData, onSave, o
           className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg active:scale-[0.98] transition-transform"
         >
           <Save size={20} />
-          Kaydet
+          Enregistrer
         </button>
       </div>
     </div>

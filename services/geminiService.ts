@@ -7,15 +7,15 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 export const generateParentMessage = async (data: AIRequestData): Promise<string> => {
   try {
     const prompt = `
-      Sen yardımcı bir asistan öğretmensin. Aşağıdaki bilgilere dayanarak bir öğrenci velisine göndermek üzere nazik, profesyonel ve kısa bir Türkçe WhatsApp mesajı taslağı oluştur.
+      Tu es un assistant pédagogique utile. Sur la base des informations ci-dessous, rédige un brouillon de message WhatsApp poli, professionnel et court en FRANÇAIS à envoyer au parent d'un élève.
 
-      Öğrenci Adı: ${data.studentName}
-      Veli Adı: ${data.parentName}
-      Konu/Durum: ${data.topic}
+      Nom de l'élève : ${data.studentName}
+      Nom du parent : ${data.parentName}
+      Sujet/Situation : ${data.topic}
 
-      Mesaj doğrudan veliye hitaben yazılmalı ("Sayın [Veli Adı], ...").
-      İmza kısmına "[Öğretmen Adı]" yaz.
-      Sadece mesaj içeriğini döndür, başka açıklama ekleme.
+      Le message doit s'adresser directement au parent ("Bonjour [Nom du parent], ...").
+      Signe le message avec "[Nom de l'enseignant]".
+      Ne renvoie que le contenu du message, n'ajoute aucune autre explication.
     `;
 
     const response = await ai.models.generateContent({
@@ -23,9 +23,9 @@ export const generateParentMessage = async (data: AIRequestData): Promise<string
       contents: prompt,
     });
 
-    return response.text || "Mesaj oluşturulamadı.";
+    return response.text || "Le message n'a pas pu être créé.";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Yapay zeka servisine bağlanırken bir hata oluştu.");
+    throw new Error("Une erreur s'est produite lors de la connexion au service IA.");
   }
 };
