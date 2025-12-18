@@ -118,6 +118,15 @@ const App: React.FC = () => {
   // Get unique schools based on Turkish School (primary grouping)
   const uniqueSchools = Array.from(new Set(students.map(s => s.turkishSchool).filter(Boolean))).sort();
 
+  // Calculate student counts per school
+  const schoolCounts = students.reduce((acc, curr) => {
+    const school = curr.turkishSchool;
+    if (school) {
+      acc[school] = (acc[school] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
   const filteredStudents = selectedSchool 
     ? students.filter(s => s.turkishSchool === selectedSchool)
     : students;
@@ -153,7 +162,7 @@ const App: React.FC = () => {
                         : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/50 border border-indigo-500/30'
                     }`}
                   >
-                    Tous
+                    Tous ({students.length})
                   </button>
                   {uniqueSchools.map(school => (
                     <button
@@ -165,7 +174,7 @@ const App: React.FC = () => {
                           : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/50 border border-indigo-500/30'
                       }`}
                     >
-                      {school}
+                      {school} ({schoolCounts[school as string] || 0})
                     </button>
                   ))}
                 </div>

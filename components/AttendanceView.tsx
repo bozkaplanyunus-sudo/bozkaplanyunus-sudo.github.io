@@ -47,6 +47,15 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
   // Filter Logic
   const uniqueSchools = Array.from(new Set(students.map(s => s.turkishSchool || s.schoolName).filter(Boolean))).sort();
   
+  // Calculate student counts per school
+  const schoolCounts = students.reduce((acc, curr) => {
+    const school = curr.turkishSchool || curr.schoolName;
+    if (school) {
+      acc[school] = (acc[school] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
   const filteredStudents = selectedSchool 
     ? students.filter(s => (s.turkishSchool === selectedSchool) || (!s.turkishSchool && s.schoolName === selectedSchool)) 
     : students;
@@ -155,7 +164,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
                 : 'bg-white text-gray-600 border border-gray-200'
             }`}
           >
-            Tous
+            Tous ({students.length})
           </button>
           {uniqueSchools.map(school => (
             <button
@@ -167,7 +176,7 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({ students, attend
                   : 'bg-white text-gray-600 border border-gray-200'
             }`}
           >
-            {school as string}
+            {school as string} ({schoolCounts[school as string] || 0})
           </button>
           ))}
         </div>
